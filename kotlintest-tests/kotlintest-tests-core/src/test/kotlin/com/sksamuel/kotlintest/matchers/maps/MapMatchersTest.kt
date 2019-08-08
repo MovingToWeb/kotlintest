@@ -1,30 +1,13 @@
 package com.sksamuel.kotlintest.matchers.maps
 
-import io.kotlintest.matchers.contain
-import io.kotlintest.matchers.containAll
-import io.kotlintest.matchers.containExactly
-import io.kotlintest.matchers.haveKey
-import io.kotlintest.matchers.haveKeys
-import io.kotlintest.matchers.haveValue
-import io.kotlintest.matchers.haveValues
-import io.kotlintest.matchers.maps.shouldContain
-import io.kotlintest.matchers.maps.shouldContainAll
-import io.kotlintest.matchers.maps.shouldContainExactly
-import io.kotlintest.matchers.maps.shouldContainKey
-import io.kotlintest.matchers.maps.shouldContainKeys
-import io.kotlintest.matchers.maps.shouldContainValue
-import io.kotlintest.matchers.maps.shouldContainValues
-import io.kotlintest.matchers.maps.shouldNotContain
-import io.kotlintest.matchers.maps.shouldNotContainAll
-import io.kotlintest.matchers.maps.shouldNotContainKey
-import io.kotlintest.matchers.maps.shouldNotContainValue
-import io.kotlintest.matchers.maps.shouldNotContainValues
+import io.kotlintest.matchers.*
+import io.kotlintest.matchers.maps.*
 import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNot
 import io.kotlintest.shouldThrow
 import io.kotlintest.specs.WordSpec
-import java.util.LinkedList
+import java.util.*
 
 class MapMatchersTest : WordSpec() {
 
@@ -148,7 +131,7 @@ class MapMatchersTest : WordSpec() {
       }
       "test when map contains extra entries" {
         mapOf("a" to 1, "b" to 2) should (
-            containAll(mapOf("a" to 1)) and containAll(mapOf("b" to 2)))
+                containAll(mapOf("a" to 1)) and containAll(mapOf("b" to 2)))
       }
       "test assertion when map contains different value type" {
         val e = shouldThrow<AssertionError> {
@@ -247,6 +230,29 @@ class MapMatchersTest : WordSpec() {
           |but equals
           |
         """.trimMargin()
+      }
+    }
+    "be empty" should {
+      "Work on an empty map" {
+        emptyMap<String, String>().shouldBeEmpty()
+      }
+
+      "Fail on a non empty map" {
+        shouldThrow<AssertionError> {
+          mapOf("Foo" to "Bar").shouldBeEmpty()
+        }
+      }
+    }
+
+    "Not be empty" should {
+      "Fail on an empty map" {
+        shouldThrow<AssertionError> {
+          emptyMap<String, String>().shouldNotBeEmpty()
+        }
+      }
+
+      "Pass on a non empty map" {
+        mapOf("Foo" to "Bar").shouldNotBeEmpty()
       }
     }
   }

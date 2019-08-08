@@ -2,12 +2,7 @@ package io.kotlintest.matchers.maps
 
 import io.kotlintest.Matcher
 import io.kotlintest.MatcherResult
-import io.kotlintest.matchers.containAll
-import io.kotlintest.matchers.containExactly
-import io.kotlintest.matchers.haveKey
-import io.kotlintest.matchers.haveKeys
-import io.kotlintest.matchers.haveValue
-import io.kotlintest.matchers.haveValues
+import io.kotlintest.matchers.*
 import io.kotlintest.should
 import io.kotlintest.shouldNot
 
@@ -38,3 +33,16 @@ fun <K, V> Map<K, V>.shouldNotContainKeys(vararg keys: K) = this shouldNot haveK
 
 fun <K, V> Map<K, V>.shouldContainValues(vararg values: V) = this should haveValues(*values)
 fun <K, V> Map<K, V>.shouldNotContainValues(vararg values: V) = this shouldNot haveValues(*values)
+
+fun <K, V> Map<K, V>.shouldBeEmpty() = this should beEmpty()
+fun <K, V> Map<K, V>.shouldNotBeEmpty() = this shouldNot beEmpty()
+
+fun beEmpty() = object : Matcher<Map<*, *>> {
+  override fun test(value: Map<*, *>): MatcherResult {
+    return MatcherResult(
+            value.isEmpty(),
+            { "Map should be empty, but was $value." },
+            { "Map should not be empty, but was." }
+    )
+  }
+}
